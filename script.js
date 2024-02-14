@@ -45,11 +45,11 @@ const Tree = (treeArr) => {
     let previousNode = null;
     while (currentNode) {
       if (currentNode.data === val) return;
+
+      previousNode = currentNode;
       if (currentNode.data > val) {
-        previousNode = currentNode;
         currentNode = currentNode.left;
       } else {
-        previousNode = currentNode;
         currentNode = currentNode.right;
       }
     }
@@ -58,18 +58,81 @@ const Tree = (treeArr) => {
     else previousNode.right = Node(val);
   }
 
+  function remove(val) {
+    let currentNode = root;
+    let previousNode = null;
+    let branch = null;
+    while (currentNode) {
+      if (currentNode.data === val) {
+        // remove a leaf
+        if (currentNode.left === null && currentNode.right === null) {
+          if (branch === "left") {
+            previousNode.left = null;
+            return;
+          } else if (branch === "right") {
+            previousNode.right = null;
+            return;
+          } else {
+            root = null;
+            return;
+          }
+        }
+        // remove a node that has two children
+        // find next biggest (most left on right subtree)
+        // replace old node with the found one
+        if (currentNode.left && currentNode.right) {
+          let subNode = currentNode.right;
+          while (subNode.left) {
+            subNode = subNode.left;
+          }
+          subNode.left = currentNode.left;
+          if (branch === "left") {
+            previousNode.left = subNode;
+            return true;
+          }
+          previousNode.right = subNode;
+          return true;
+        }
+        // remove a node that has one child
+        // replace it with its child
+        if (currentNode.left) {
+          if (branch === "left") {
+            previousNode.left = currentNode.left;
+            return true;
+          }
+          previousNode.right = currentNode.left;
+          return true;
+        }
+        if (currentNode.right) {
+          if (branch === "left") {
+            previousNode.left = currentNode.right;
+            return true;
+          }
+          previousNode.right = currentNode.right;
+          return true;
+        }
+      }
+      previousNode = currentNode;
+      if (currentNode.data > val) {
+        branch = "left";
+        currentNode = currentNode.left;
+      } else {
+        branch = "right";
+        currentNode = currentNode.right;
+      }
+    }
+    return false;
+  }
+
   return {
     prettyPrint,
     insert,
+    remove,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
 newTree.prettyPrint();
-newTree.insert(9);
-newTree.prettyPrint();
-newTree.insert(8);
-newTree.prettyPrint();
-newTree.insert(7.5);
+newTree.remove(6);
 newTree.prettyPrint();
