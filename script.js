@@ -150,16 +150,48 @@ const Tree = (treeArr) => {
     if (!callback) return order;
   }
 
+  function inOrder(callback, currentNode = root, order = []) {
+    if (currentNode === null) return;
+    inOrder(callback, currentNode.left, order);
+    if (callback) callback(currentNode.data);
+    order.push(currentNode.data);
+    inOrder(callback, currentNode.right, order);
+
+    if (!callback) return order;
+  }
+
+  function preOrder(callback, currentNode = root, order = []) {
+    if (currentNode === null) return;
+    if (callback) callback(currentNode.data);
+    order.push(currentNode.data);
+    preOrder(callback, currentNode.left, order);
+    preOrder(callback, currentNode.right, order);
+
+    if (!callback) return order;
+  }
+
+  function postOrder(callback, currentNode = root, order = []) {
+    if (currentNode === null) return;
+    postOrder(callback, currentNode.left, order);
+    postOrder(callback, currentNode.right, order);
+    if (callback) callback(currentNode.data);
+    order.push(currentNode.data);
+
+    if (!callback) return order;
+  }
   return {
     prettyPrint,
     insert,
     remove,
     find,
     levelOrder,
+    inOrder,
+    preOrder,
+    postOrder,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
 newTree.prettyPrint();
-console.log(newTree.levelOrder());
+console.log(newTree.postOrder());
