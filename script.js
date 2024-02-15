@@ -134,15 +134,32 @@ const Tree = (treeArr) => {
     return false;
   }
 
+  function levelOrder(callback) {
+    let order = [];
+    let currentNode = root;
+    let queue = [currentNode];
+    while (queue.length !== 0) {
+      currentNode = queue.shift();
+      if (callback) callback(currentNode.data);
+      order.push(currentNode.data);
+
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+    }
+
+    if (!callback) return order;
+  }
+
   return {
     prettyPrint,
     insert,
     remove,
     find,
+    levelOrder,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
 newTree.prettyPrint();
-console.log(newTree.find(4));
+console.log(newTree.levelOrder());
