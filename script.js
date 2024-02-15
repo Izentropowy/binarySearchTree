@@ -124,15 +124,25 @@ const Tree = (treeArr) => {
     return false;
   }
 
+  function find(val) {
+    let currentNode = root;
+    while (currentNode) {
+      if (currentNode.data === val) return currentNode;
+      if (currentNode.data > val) currentNode = currentNode.left;
+      if (currentNode.data < val) currentNode = currentNode.right;
+    }
+    return false;
+  }
+
   return {
     prettyPrint,
     insert,
     remove,
+    find,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
 newTree.prettyPrint();
-newTree.remove(6);
-newTree.prettyPrint();
+console.log(newTree.find(4));
