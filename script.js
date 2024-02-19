@@ -1,3 +1,9 @@
+Array.prototype.sortIntegers = function () {
+  return this.sort(function (a, b) {
+    return a - b;
+  });
+};
+
 const Node = (data) => {
   return {
     data: data,
@@ -8,7 +14,7 @@ const Node = (data) => {
 
 const Tree = (treeArr) => {
   // sort and remove duplicates
-  treeArr = treeArr.sort();
+  treeArr = treeArr.sortIntegers();
   treeArr = [...new Set(treeArr)];
 
   let treeStart = 0;
@@ -211,6 +217,19 @@ const Tree = (treeArr) => {
     return true;
   }
 
+  function rebalance() {
+    if (isBalanced()) return;
+    let arr = preOrder();
+    arr = arr.sortIntegers();
+    arr = [...new Set(arr)];
+
+    let start = 0;
+    let end = arr.length - 1;
+
+    root = buildTree(arr, start, end);
+    prettyPrint();
+  }
+
   return {
     prettyPrint,
     insert,
@@ -223,15 +242,13 @@ const Tree = (treeArr) => {
     height,
     depth,
     isBalanced,
+    rebalance,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
-console.log(newTree.isBalanced());
 newTree.insert(8);
 newTree.insert(9);
 newTree.insert(14);
 newTree.prettyPrint();
-let testNode = newTree.find(8);
-console.log(newTree.isBalanced());
