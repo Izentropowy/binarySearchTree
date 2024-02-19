@@ -140,7 +140,7 @@ const Tree = (treeArr) => {
     let queue = [currentNode];
     while (queue.length !== 0) {
       currentNode = queue.shift();
-      if (callback) callback(currentNode.data);
+      if (callback) callback(currentNode);
       order.push(currentNode.data);
 
       if (currentNode.left) queue.push(currentNode.left);
@@ -153,7 +153,7 @@ const Tree = (treeArr) => {
   function inOrder(callback, currentNode = root, order = []) {
     if (currentNode === null) return;
     inOrder(callback, currentNode.left, order);
-    if (callback) callback(currentNode.data);
+    if (callback) callback(currentNode);
     order.push(currentNode.data);
     inOrder(callback, currentNode.right, order);
 
@@ -162,7 +162,7 @@ const Tree = (treeArr) => {
 
   function preOrder(callback, currentNode = root, order = []) {
     if (currentNode === null) return;
-    if (callback) callback(currentNode.data);
+    if (callback) callback(currentNode);
     order.push(currentNode.data);
     preOrder(callback, currentNode.left, order);
     preOrder(callback, currentNode.right, order);
@@ -174,11 +174,31 @@ const Tree = (treeArr) => {
     if (currentNode === null) return;
     postOrder(callback, currentNode.left, order);
     postOrder(callback, currentNode.right, order);
-    if (callback) callback(currentNode.data);
+    if (callback) callback(currentNode);
     order.push(currentNode.data);
 
     if (!callback) return order;
   }
+
+  function height(currentNode = root) {
+    if (!currentNode) return 0;
+    if (!currentNode.left && !currentNode.right) return 0;
+    return Math.max(height(currentNode.left), height(currentNode.right)) + 1;
+  }
+
+  function depth(node) {
+    let currentNode = root;
+    let depth = 0;
+    while (currentNode) {
+      console.log(depth);
+      if (currentNode.data === node.data) return depth;
+      if (currentNode.data > node.data) currentNode = currentNode.left;
+      if (currentNode.data < node.data) currentNode = currentNode.right;
+      depth++;
+    }
+    return false;
+  }
+
   return {
     prettyPrint,
     insert,
@@ -188,10 +208,16 @@ const Tree = (treeArr) => {
     inOrder,
     preOrder,
     postOrder,
+    height,
+    depth,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
+newTree.insert(8);
+newTree.insert(9);
+newTree.insert(14);
 newTree.prettyPrint();
-console.log(newTree.postOrder());
+let testNode = newTree.find(8);
+console.log(newTree.depth(testNode));
