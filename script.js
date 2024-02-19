@@ -189,14 +189,26 @@ const Tree = (treeArr) => {
   function depth(node) {
     let currentNode = root;
     let depth = 0;
+
     while (currentNode) {
-      console.log(depth);
       if (currentNode.data === node.data) return depth;
       if (currentNode.data > node.data) currentNode = currentNode.left;
       if (currentNode.data < node.data) currentNode = currentNode.right;
       depth++;
     }
     return false;
+  }
+
+  function isBalanced(currentNode = root) {
+    let queue = [currentNode];
+    while (queue.length !== 0) {
+      currentNode = queue.shift();
+      if (Math.abs(height(currentNode.left) - height(currentNode.right)) > 1)
+        return false;
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+    }
+    return true;
   }
 
   return {
@@ -210,14 +222,16 @@ const Tree = (treeArr) => {
     postOrder,
     height,
     depth,
+    isBalanced,
   };
 };
 
 let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 let newTree = Tree(arr);
+console.log(newTree.isBalanced());
 newTree.insert(8);
 newTree.insert(9);
 newTree.insert(14);
 newTree.prettyPrint();
 let testNode = newTree.find(8);
-console.log(newTree.depth(testNode));
+console.log(newTree.isBalanced());
