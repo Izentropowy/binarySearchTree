@@ -227,7 +227,6 @@ const Tree = (treeArr) => {
     let end = arr.length - 1;
 
     root = buildTree(arr, start, end);
-    prettyPrint();
   }
 
   return {
@@ -246,9 +245,4 @@ const Tree = (treeArr) => {
   };
 };
 
-let arr = [1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
-let newTree = Tree(arr);
-newTree.insert(8);
-newTree.insert(9);
-newTree.insert(14);
-newTree.prettyPrint();
+module.exports = { Tree };
